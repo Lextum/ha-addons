@@ -11,7 +11,7 @@ ports:
   8080/tcp: 8080
 ports_description:
   8080/tcp: Web UI (open directly — ingress cannot provide SharedArrayBuffer)
-webui: "[PROTO:ssl]://[HOST]:[PORT:8080/tcp]"
+webui: "[PROTO:ssl]://[HOST]:[PORT:8080]"
 map:
   - ssl
 options:

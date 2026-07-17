@@ -21,7 +21,12 @@ RUN curl -fsSL -o /tmp/chrome-demo.tar.gz \
  && mkdir -p /app/www \
  && tar -xzf /tmp/chrome-demo.tar.gz -C /tmp \
  && mv /tmp/dist/* /app/www/ \
- && rm -rf /tmp/chrome-demo.tar.gz /tmp/dist
+ && rm -rf /tmp/chrome-demo.tar.gz /tmp/dist \
+ # The release demo hardcodes fetching its WISP relay URL from puter.work,
+ # which rejects unknown origins ("not authorized"). Flip the flag so the
+ # demo falls back to same-origin /wisp/ (this add-on's own proxy).
+ # grep guards the build: fails loudly if a new release changes the minified name.
+ && grep -rl 'const F=!0' /app/www/assets | xargs sed -i 's/const F=!0/const F=!1/'
 
 RUN npm install --omit=dev @mercuryworkshop/wisp-js@^0.4.1
 
