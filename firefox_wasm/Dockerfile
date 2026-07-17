@@ -28,7 +28,10 @@ RUN curl -fsSL -o /tmp/chrome-demo.tar.gz \
  # grep guards the build: fails loudly if a new release changes the minified name.
  && grep -rl 'const F=!0' /app/www/assets | xargs sed -i 's/const F=!0/const F=!1/'
 
-RUN npm install --omit=dev @mercuryworkshop/wisp-js@^0.4.1
+# bufferutil (hard dep of wisp-js) ships no aarch64-musl prebuild; compile it.
+RUN apk add --no-cache --virtual .build-deps python3 make g++ \
+ && npm install --omit=dev @mercuryworkshop/wisp-js@^0.4.1 \
+ && apk del .build-deps
 
 COPY server.mjs run.sh /app/
 RUN chmod +x /app/run.sh
