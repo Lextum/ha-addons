@@ -1,5 +1,12 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:3.21
-FROM $BUILD_FROM
+# Supervisor 2026.04.0+ no longer injects BUILD_FROM; use the multi-arch base directly.
+FROM ghcr.io/home-assistant/base:3.21
+
+ARG BUILD_ARCH=amd64
+ARG BUILD_VERSION=1.0.0
+LABEL \
+  io.hass.version="${BUILD_VERSION}" \
+  io.hass.type="app" \
+  io.hass.arch="${BUILD_ARCH}"
 
 # Prebuilt chrome-demo (static Vite site) from the firefox-wasm release —
 # building Gecko->wasm from source needs ~26 GB disk + hours; never do it here.
